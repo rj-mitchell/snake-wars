@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const gridSize = 20;
+const gridSize = 40;
 const tileSize = canvas.width / gridSize;
 const scoreDisplay = document.getElementById("scoreDisplay");
 let score = 0;
@@ -71,38 +71,45 @@ const ai3 = new Snake("yellow");
 const aiSnakes = [ai1, ai2, ai3];
 
 function aiLogic(snake) {
-  const possibleMoves = [
-    { x: snake.body[0].x + 1, y: snake.body[0].y },
-    { x: snake.body[0].x - 1, y: snake.body[0].y },
-    { x: snake.body[0].x, y: snake.body[0].y + 1 },
-    { x: snake.body[0].x, y: snake.body[0].y - 1 },
-  ];
+    const possibleMoves = [
+        { x: snake.body[0].x + 1, y: snake.body[0].y },
+        { x: snake.body[0].x - 1, y: snake.body[0].y },
+        { x: snake.body[0].x, y: snake.body[0].y + 1 },
+        { x: snake.body[0].x, y: snake.body[0].y - 1 },
+    ];
 
-  const validMoves = possibleMoves.filter(
-    (move) =>
-      move.x >= 0 &&
-      move.x < gridSize &&
-      move.y >= 0 &&
-      move.y < gridSize &&
-      !snake.body.some(
-        (segment) => segment.x === move.x && segment.y === move.y
-      ) &&
-      !player.body.some(
-        (segment) => segment.x === move.x && segment.y === move.y
-      ) &&
-      !aiSnakes
-        .filter((other) => other !== snake)
-        .some((other) =>
-          other.body.some((segment) => segment.x === move.x && segment.y === move.y)
-        )
-  );
+    const validMoves = possibleMoves.filter(
+        (move) =>
+            move.x >= 0 &&
+            move.x < gridSize &&
+            move.y >= 0 &&
+            move.y < gridSize &&
+            !snake.body.some(
+                (segment) => segment.x === move.x && segment.y === move.y
+            ) &&
+            !player.body.some(
+                (segment) => segment.x === move.x && segment.y === move.y
+            ) &&
+            !aiSnakes
+                .filter((other) => other !== snake)
+                .some((other) =>
+                    other.body.some((segment) => segment.x === move.x && segment.y === move.y)
+                )
+    );
+
+    const playerDistance = (move) => {
+        return Math.abs(move.x - player.body[0].x) + Math.abs(move.y - player.body[0].y);
+    };
 
     if (validMoves.length > 0) {
-        const move = validMoves[Math.floor(Math.random() * validMoves.length)];
-        if (move.x > snake.body[0].x) snake.direction = 0;
-        else if (move.x < snake.body[0].x) snake.direction = 2;
-        else if (move.y > snake.body[0].y) snake.direction = 1;
-        else if (move.y < snake.body[0].y) snake.direction = 3;
+        const sortedMoves = validMoves.sort(
+            (a, b) => playerDistance(a) - playerDistance(b)
+        );
+        const aggressiveMove = sortedMoves[0];
+        if (aggressiveMove.x > snake.body[0].x) snake.direction = 0;
+        else if (aggressiveMove.x < snake.body[0].x) snake.direction = 2;
+        else if (aggressiveMove.y > snake.body[0].y) snake.direction = 1;
+        else if (aggressiveMove.y < snake.body[0].y) snake.direction = 3;
     }
 }
 
