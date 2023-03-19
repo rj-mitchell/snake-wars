@@ -113,6 +113,29 @@ function aiLogic(snake) {
     }
 }
 
+function checkCollisions(snake, otherSnakes) {
+    const head = snake.body[0];
+    if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
+        return true;
+    }
+
+    for (const segment of snake.body.slice(1)) {
+        if (head.x === segment.x && head.y === segment.y) {
+            return true;
+        }
+    }
+
+    for (const otherSnake of otherSnakes) {
+        for (const segment of otherSnake.body) {
+            if (head.x === segment.x && head.y === segment.y) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -125,6 +148,17 @@ function gameLoop() {
         aiSnake.draw();
     }
 
+  if (checkCollisions(player, aiSnakes)) {
+    player.alive = false;
+    endGame('lose');
+}
+
+for (const aiSnake of aiSnakes) {
+    if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake))) {
+        aiSnake.alive = false;
+    }
+}
+  
     score++;
     scoreDisplay.textContent = `Score: ${score}`;
 
@@ -149,12 +183,23 @@ function hideOverlay() {
 
 function startGame() {
     hideOverlay();
+    player.alive = true;
+    ai1.alive = true;
+    ai2.alive = true;
+    ai3.alive = true;
+    score = 0;
     gameInterval = setInterval(gameLoop, 100);
 }
 
 function endGame(result) {
     clearInterval(gameInterval);
-    displayOverlay(result === 'win' ? 'You Win' : 'You Lose');
+    setTimeout(() => {
+        displayOverlay(result === 'win' ? 'You Win' : 'You Lose');
+        setTimeout(() => {
+            displayOverlay('Snake Wars - Press any key to start');
+        }, 3000);
+    }, 100);
+}
 }
 
 document.addEventListener('keydown', (e) => {
