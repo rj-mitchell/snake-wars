@@ -182,6 +182,7 @@ function hideOverlay() {
 }
 
 function startGame() {
+    gameStarted = true;
     hideOverlay();
     player.alive = true;
     ai1.alive = true;
@@ -197,9 +198,9 @@ function endGame(result) {
         displayOverlay(result === 'win' ? 'You Win' : 'You Lose');
         setTimeout(() => {
             displayOverlay('Snake Wars - Press any key to start');
+            gameStarted = false;
         }, 3000);
     }, 100);
-}
 }
 
 document.addEventListener('keydown', (e) => {
@@ -224,6 +225,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-let gameStarted = false;
+let gameStarted;
 let gameInterval;
 
