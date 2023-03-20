@@ -137,6 +137,11 @@ function checkCollisions(snake, otherSnakes) {
 }
 
 function gameLoop() {
+    // Check if the game is still running
+  if (gameState !== 'running') {
+    return;
+  }
+  
   // Save current positions before updating
   const currentPlayerHead = { x: player.body[0].x, y: player.body[0].y };
   const aiSnakesHeads = aiSnakes.map((aiSnake) => ({ x: aiSnake.body[0].x, y: aiSnake.body[0].y }));
