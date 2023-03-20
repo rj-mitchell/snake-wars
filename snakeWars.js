@@ -151,7 +151,7 @@ function gameLoop() {
   }
 
   // Check for collisions
-  if (checkCollisions(player, aiSnakes.concat([{ body: player.body.slice(1) }]))) {
+  if (checkCollisions(player, aiSnakes.concat([{ body: player.body.slice(1) }])) || checkCollisions(player, [{ body: [currentPlayerHead] }])) {
     player.alive = false;
     endGame('lose');
     return;
@@ -230,7 +230,7 @@ function endGame(result) {
 
 document.addEventListener('keydown', (e) => {
     if (gameState === 'ended' || gameState === 'not_started') {
-        endGame();
+        startGame();
         return;
     }
 
