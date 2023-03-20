@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const gridSize = 40;
+const gridSize = 30;
 const tileSize = canvas.width / gridSize;
 const scoreDisplay = document.getElementById("scoreDisplay");
 let score = 0;
