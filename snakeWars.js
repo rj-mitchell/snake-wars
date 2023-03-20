@@ -149,7 +149,7 @@ function gameLoop() {
   }
 
   // Check for collisions
-    if (checkCollisions(player, aiSnakes) || checkCollisions(player, [{ body: player.body.slice(1) }])) {
+  if (checkCollisions(player, aiSnakes.concat([{ body: player.body.slice(1) }]))) {
     player.alive = false;
     endGame('lose');
     return;
