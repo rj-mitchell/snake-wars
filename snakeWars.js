@@ -195,7 +195,11 @@ function startGame() {
 function endGame(result) {
     clearInterval(gameInterval);
     setTimeout(() => {
-        displayOverlay(result === 'win' ? 'You Win' : 'You Lose');
+        if (result === 'win') {
+            displayOverlay(`You Win - Score: ${score}`);
+        } else {
+            displayOverlay('You Lose');
+        }
         setTimeout(() => {
             displayOverlay('Snake Wars - Press any key to start');
             gameStarted = false;
@@ -207,6 +211,7 @@ document.addEventListener('keydown', (e) => {
     if (!gameStarted) {
         gameStarted = true;
         startGame();
+        return;
     }
 
     switch (e.key) {
