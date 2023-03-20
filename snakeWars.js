@@ -195,8 +195,6 @@ function hideOverlay() {
 }
 
 function startGame() {
-    if (gameStarted) return;
-    gameStarted = true;
     gameState = 'running';
     hideOverlay();
     player.alive = true;
@@ -243,7 +241,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-let gameStarted = false;
 let gameInterval;
 let gameState = 'not_started';
 
