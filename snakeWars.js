@@ -137,26 +137,39 @@ function checkCollisions(snake, otherSnakes) {
 }
 
 function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    player.update();
-    player.draw();
-
+    moveSnake(player);
     for (const aiSnake of aiSnakes) {
         aiLogic(aiSnake);
-        aiSnake.update();
-        aiSnake.draw();
+        moveSnake(aiSnake);
     }
 
-  if (checkCollisions(player, aiSnakes)) {
-    player.alive = false;
-    endGame('lose');
-}
-
-for (const aiSnake of aiSnakes) {
-    if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake))) {
-        aiSnake.alive = false;
+    if (checkCollisions(player, aiSnakes)) {
+        player.alive = false;
+        endGame('lose');
+        return;
     }
+
+    let aiAliveCount = aiSnakes.filter((aiSnake) => aiSnake.alive).length;
+    for (const aiSnake of aiSnakes) {
+        if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake))) {
+            aiSnake.alive = false;
+            aiAliveCount -= 1;
+        }
+    }
+    
+    if (aiAliveCount === 0) {
+        endGame('win');
+        return;
+    }
+
+    drawBackground();
+    drawSnake(player);
+    for (const aiSnake of aiSnakes) {
+        drawSnake(aiSnake);
+    }
+
+    score++;
+    scoreDisplay.textContent = `Score: ${score}`;
 }
   
     score++;
@@ -194,17 +207,17 @@ function startGame() {
 
 function endGame(result) {
     clearInterval(gameInterval);
+
+    if (result === 'win') {
+        displayOverlay(`You Win - Score: ${score}`);
+    } else {
+        displayOverlay('You Lose');
+    }
+
     setTimeout(() => {
-        if (result === 'win') {
-            displayOverlay(`You Win - Score: ${score}`);
-        } else {
-            displayOverlay('You Lose');
-        }
-        setTimeout(() => {
-            displayOverlay('Snake Wars - Press any key to start');
-            gameStarted = false;
-        }, 3000);
-    }, 100);
+        displayOverlay('Snake Wars - Press any key to start');
+        gameStarted = false;
+    }, 3000);
 }
 
 document.addEventListener('keydown', (e) => {
