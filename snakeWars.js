@@ -221,8 +221,7 @@ function endGame(result) {
 }
 
 document.addEventListener('keydown', (e) => {
-    if (!gameStarted) {
-        gameStarted = true;
+    if (gameState === 'ended' || gameState === 'not_started') {
         startGame();
         return;
     }
@@ -245,5 +244,5 @@ document.addEventListener('keydown', (e) => {
 
 let gameStarted;
 let gameInterval;
-let gameState;
+let gameState = 'not_started';
 
