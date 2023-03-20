@@ -172,6 +172,8 @@ function gameLoop() {
   scoreDisplay.textContent = `Score: ${score}`;
 }
 
+
+
 function displayOverlay(text) {
     const overlay = document.getElementById('overlay');
     const overlayText = document.getElementById('overlayText');
@@ -196,18 +198,26 @@ function startGame() {
 }
 
 function endGame(result) {
-    gameState = 'ended';
-    clearInterval(gameInterval);
-    if (result === 'win') {
-        displayOverlay(`You Win - Score: ${score}`);
-    } else {
-        displayOverlay('You Lose');
-    }
-    setTimeout(() => {
-        displayOverlay('Snake Wars - Press any key to start');
-        gameStarted = false;
-    }, 3000);
+  gameState = 'ended';
+  clearInterval(gameInterval);
+
+  const overlay = document.getElementById('overlay');
+  const title = document.getElementById('title');
+  const subtitle = document.getElementById('subtitle');
+
+  if (result === 'win') {
+    title.textContent = `You Win!`;
+    subtitle.textContent = `Score: ${score}`;
+  } else {
+    title.textContent = `You Lose!`;
+  }
+
+  setTimeout(() => {
+    title.textContent = 'Snake Wars';
+    subtitle.textContent = 'Press any key to start';
+  }, 3000);
 }
+
 
 document.addEventListener('keydown', (e) => {
     if (gameState === 'ended' || gameState === 'not_started') {
