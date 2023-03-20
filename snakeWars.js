@@ -137,13 +137,19 @@ function checkCollisions(snake, otherSnakes) {
 }
 
 function gameLoop() {
+  // Save current positions before updating
+  const currentPlayerHead = { x: player.body[0].x, y: player.body[0].y };
+  const aiSnakesHeads = aiSnakes.map((aiSnake) => ({ x: aiSnake.body[0].x, y: aiSnake.body[0].y }));
+
+  // Update positions
   player.update();
   for (const aiSnake of aiSnakes) {
     aiLogic(aiSnake);
     aiSnake.update();
   }
 
-  if (checkCollisions(player, aiSnakes)) {
+  // Check for collisions
+  if (checkCollisions(player, aiSnakes) || checkCollisions(player, [{ body: [currentPlayerHead] }])) {
     player.alive = false;
     endGame('lose');
     return;
@@ -151,7 +157,7 @@ function gameLoop() {
 
   let aiAliveCount = aiSnakes.filter((aiSnake) => aiSnake.alive).length;
   for (const aiSnake of aiSnakes) {
-    if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake))) {
+    if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake).concat([{ body: [aiSnakesHeads.shift()] }]))) {
       aiSnake.alive = false;
       aiAliveCount -= 1;
     }
@@ -171,8 +177,6 @@ function gameLoop() {
   score++;
   scoreDisplay.textContent = `Score: ${score}`;
 }
-
-
 
 function displayOverlay(text) {
     const overlay = document.getElementById('overlay');
