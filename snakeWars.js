@@ -114,26 +114,26 @@ function aiLogic(snake) {
 }
 
 function checkCollisions(snake, otherSnakes) {
-    const head = snake.body[0];
-    if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
+  const head = snake.body[0];
+  if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
+    return true;
+  }
+
+  for (const segment of snake.body.slice(1)) {
+    if (head.x === segment.x && head.y === segment.y) {
+      return true;
+    }
+  }
+
+  for (const otherSnake of otherSnakes) {
+    for (const segment of otherSnake.body) {
+      if (head.x === segment.x && head.y === segment.y) {
         return true;
+      }
     }
+  }
 
-    for (const segment of snake.body.slice(1)) {
-        if (head.x === segment.x && head.y === segment.y) {
-            return true;
-        }
-    }
-
-    for (const otherSnake of otherSnakes) {
-        for (const segment of otherSnake.body) {
-            if (head.x === segment.x && head.y === segment.y) {
-                return true;
-            }
-        }
-    }
-
-    return false;
+  return false;
 }
 
 function gameLoop() {
