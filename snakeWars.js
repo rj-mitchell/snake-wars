@@ -243,7 +243,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-let gameStarted;
+let gameStarted = false;
 let gameInterval;
 let gameState = 'not_started';
 
