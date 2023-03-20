@@ -195,6 +195,7 @@ function hideOverlay() {
 }
 
 function startGame() {
+    if (gameStarted) return;
     gameStarted = true;
     gameState = 'running';
     hideOverlay();
