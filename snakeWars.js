@@ -211,9 +211,12 @@ function endGame(result) {
 
   if (result === 'win') {
     title.textContent = `You Win!`;
+    title.color = 'white';
     subtitle.textContent = `Score: ${score}`;
+    subtitle.color = 'white';
   } else {
     title.textContent = `You Lose!`;
+    title.color = 'white';    
   }
 
   setTimeout(() => {
