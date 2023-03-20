@@ -163,7 +163,7 @@ function gameLoop() {
     }
   }
 
-  if (aiAliveCount === 1) {
+  if (aiAliveCount === 0) {
     endGame('win');
     return;
   }
