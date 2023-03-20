@@ -137,49 +137,39 @@ function checkCollisions(snake, otherSnakes) {
 }
 
 function gameLoop() {
-    moveSnake(player);
-    for (const aiSnake of aiSnakes) {
-        aiLogic(aiSnake);
-        moveSnake(aiSnake);
-    }
+  player.update();
+  for (const aiSnake of aiSnakes) {
+    aiLogic(aiSnake);
+    aiSnake.update();
+  }
 
-    if (checkCollisions(player, aiSnakes)) {
-        player.alive = false;
-        endGame('lose');
-        return;
-    }
+  if (checkCollisions(player, aiSnakes)) {
+    player.alive = false;
+    endGame('lose');
+    return;
+  }
 
-    let aiAliveCount = aiSnakes.filter((aiSnake) => aiSnake.alive).length;
-    for (const aiSnake of aiSnakes) {
-        if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake))) {
-            aiSnake.alive = false;
-            aiAliveCount -= 1;
-        }
+  let aiAliveCount = aiSnakes.filter((aiSnake) => aiSnake.alive).length;
+  for (const aiSnake of aiSnakes) {
+    if (checkCollisions(aiSnake, aiSnakes.filter((other) => other !== aiSnake))) {
+      aiSnake.alive = false;
+      aiAliveCount -= 1;
     }
-    
-    if (aiAliveCount === 0) {
-        endGame('win');
-        return;
-    }
+  }
 
-    drawBackground();
-    drawSnake(player);
-    for (const aiSnake of aiSnakes) {
-        drawSnake(aiSnake);
-    }
+  if (aiAliveCount === 0) {
+    endGame('win');
+    return;
+  }
 
-    score++;
-    scoreDisplay.textContent = `Score: ${score}`;
-}
-  
-    score++;
-    scoreDisplay.textContent = `Score: ${score}`;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  player.draw();
+  for (const aiSnake of aiSnakes) {
+    aiSnake.draw();
+  }
 
-    if (!player.alive) {
-        endGame('lose');
-    } else if (aiSnakes.every(snake => !snake.alive)) {
-        endGame('win');
-    }
+  score++;
+  scoreDisplay.textContent = `Score: ${score}`;
 }
 
 function displayOverlay(text) {
