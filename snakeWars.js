@@ -230,7 +230,7 @@ function endGame(result) {
 
 document.addEventListener('keydown', (e) => {
     if (gameState === 'ended' || gameState === 'not_started') {
-        startGame();
+        endGame();
         return;
     }
 
