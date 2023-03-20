@@ -144,8 +144,10 @@ function gameLoop() {
   // Update positions
   player.update();
   for (const aiSnake of aiSnakes) {
-    aiLogic(aiSnake);
-    aiSnake.update();
+    if (aiSnake.alive) {
+      aiLogic(aiSnake);
+      aiSnake.update();
+    }
   }
 
   // Check for collisions
