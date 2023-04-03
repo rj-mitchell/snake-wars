@@ -106,12 +106,25 @@ function aiLogic(snake) {
             (a, b) => playerDistance(a) - playerDistance(b)
         );
         const aggressiveMove = sortedMoves[0];
-        if (aggressiveMove.x > snake.body[0].x) snake.direction = 0;
-        else if (aggressiveMove.x < snake.body[0].x) snake.direction = 2;
-        else if (aggressiveMove.y > snake.body[0].y) snake.direction = 1;
-        else if (aggressiveMove.y < snake.body[0].y) snake.direction = 3;
+        const cautiousMove = sortedMoves[sortedMoves.length - 1];
+
+        // Move away from the player if the player is close
+        if (playerDistance(aggressiveMove) <= 2) {
+            if (aggressiveMove.x < snake.body[0].x) snake.direction = 0;
+            else if (aggressiveMove.x > snake.body[0].x) snake.direction = 2;
+            else if (aggressiveMove.y < snake.body[0].y) snake.direction = 1;
+            else if (aggressiveMove.y > snake.body[0].y) snake.direction = 3;
+        }
+        // Otherwise, move aggressively towards the player
+        else {
+            if (cautiousMove.x > snake.body[0].x) snake.direction = 0;
+            else if (cautiousMove.x < snake.body[0].x) snake.direction = 2;
+            else if (cautiousMove.y > snake.body[0].y) snake.direction = 1;
+            else if (cautiousMove.y < snake.body[0].y) snake.direction = 3;
+        }
     }
 }
+
 
 function checkCollisions(snake, otherSnakes) {
   const head = snake.body[0];
